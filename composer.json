@@ -41,7 +41,7 @@
     },
     "require-dev": {
         "symfony/var-dumper": "^6.2",
-        "vimeo/psalm": "^5.11",
+        "vimeo/psalm": "^5.11 || ^6",
         "friendsofphp/php-cs-fixer": "^3.65"
     }
 }
