@@ -12,15 +12,22 @@ class UserDto implements OutputDtoInterface
         public readonly string $id,
         public readonly \DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
-        public readonly ?\DateTimeImmutable $deletedAt,
         public ?string $email,
-        public bool $isAdmin,
+        public string $role,
         public ?string $name,
         public ?string $username,
         public ?string $phone,
         public ?string $organization,
         public ?string $language,
         public bool $subscribeToOwnCards,
-        public ?string $avatarUrl,
+        public bool $subscribeToCardWhenCommenting,
+        public bool $turnOffRecentCardHighlighting,
+        public bool $enableFavoritesByDefault,
+        public string $defaultEditorMode,
+        public string $defaultProjectsOrder,
+        public bool $isSsoUser,
+        public bool $isDeactivated,
+        // avatar - it's a particular structure, need to spec that out
+        public bool $isDefaultAdmin
     ) {}
 }

@@ -31,6 +31,8 @@ final class ListDtoFactory implements OutputInterface
             updatedAt: $this->convertToDateTime($data['updatedAt']),
             position: (int) $data['position'],
             name: $data['name'],
+            color: $data['color'],
+            type: $data['type'],
         );
     }
 }
