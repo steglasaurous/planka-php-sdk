@@ -12,6 +12,8 @@ class ListDto
         public readonly \DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
         public int $position,
-        public string $name,
+        public ?string $name,
+        public ?string $color,
+        public string $type,
     ) {}
 }

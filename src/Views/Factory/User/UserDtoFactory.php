@@ -40,7 +40,7 @@ final class UserDtoFactory implements OutputInterface
             createdAt: $this->convertToDateTime($data['createdAt']),
             updatedAt: $this->convertToDateTime($data['updatedAt']),
             email: $data['email'],
-            isAdmin: (bool) $data['isAdmin'],
+            role: $data['role'],
             name: $data['name'],
             username: $data['username'],
             phone: $data['phone'],
@@ -54,6 +54,14 @@ final class UserDtoFactory implements OutputInterface
             isDeletionLocked: (bool) ($data['isDeletionLocked'] ?? false),
             avatarUrl: $data['avatarUrl'] ?? null,
             _rawResponse: $data,
+            subscribeToCardWhenCommenting: (bool) $data['subscribeToCardWhenCommenting'],
+            turnOffRecentCardHighlighting: (bool) $data['turnOffRecentCardHighlighting'],
+            enableFavoritesByDefault: (bool) $data['enableFavoritesByDefault'],
+            defaultEditorMode: $data['defaultEditorMode'],
+            defaultProjectsOrder: $data['defaultProjectsOrder'],
+            isSsoUser: (bool) $data['isSsoUser'],
+            isDeactivated: (bool) $data['isDeactivated'],
+            isDefaultAdmin: (bool) $data['isDefaultAdmin'],
         );
     }
 }

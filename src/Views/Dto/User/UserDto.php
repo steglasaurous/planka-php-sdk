@@ -13,7 +13,7 @@ class UserDto implements OutputDtoInterface
         public readonly \DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
         public ?string $email,
-        public bool $isAdmin,
+        public string $role,
         public ?string $name,
         public ?string $username,
         public ?string $phone,
@@ -27,5 +27,14 @@ class UserDto implements OutputDtoInterface
         public bool $isDeletionLocked,
         public ?string $avatarUrl,
         public readonly array $_rawResponse = [],
+        public bool $subscribeToCardWhenCommenting,
+        public bool $turnOffRecentCardHighlighting,
+        public bool $enableFavoritesByDefault,
+        public string $defaultEditorMode,
+        public string $defaultProjectsOrder,
+        public bool $isSsoUser,
+        public bool $isDeactivated,
+        // avatar - it's a particular structure, need to spec that out
+        public bool $isDefaultAdmin
     ) {}
 }
