@@ -26,12 +26,13 @@ final class Card
     ) {}
 
     /** 'POST /api/lists/:listId/cards' */
-    public function create(string $listId, string $name, int $position): CardDto
+    public function create(string $listId, string $name, int $position, string $type): CardDto
     {
         return $this->client->post(new CardCreateAction(
             listId: $listId,
             name: $name,
             position: $position,
+            type: $type,
             token: $this->config->getAuthToken(),
         ));
     }

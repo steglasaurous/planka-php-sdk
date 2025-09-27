@@ -18,6 +18,7 @@ final class CardCreateAction implements ActionInterface, AuthenticateInterface, 
     public function __construct(
         private readonly string $listId,
         private readonly string $name,
+        private readonly string $type,
         private readonly int $position,
         string $token,
     ) {
@@ -35,6 +36,7 @@ final class CardCreateAction implements ActionInterface, AuthenticateInterface, 
             'body' => [
                 'name' => $this->name,
                 'position' => $this->position,
+                'type' => $this->type,
             ],
         ];
     }
