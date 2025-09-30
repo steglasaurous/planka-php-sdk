@@ -15,6 +15,7 @@ class CardTaskDto implements OutputDtoInterface
         public int $position,
         public string $name,
         public bool $isCompleted,
-        public string $cardId,
+        public string $taskListId,
+        public ?string $assigneeUserId,
     ) {}
 }
