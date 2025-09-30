@@ -32,7 +32,8 @@ final class CardTaskDtoFactory implements OutputInterface
             position: (int) $data['position'],
             name: $data['name'],
             isCompleted: (bool) $data['isCompleted'],
-            cardId: $data['cardId'],
+            taskListId: $data['taskListId'],
+            assigneeUserId: $data['assigneeUserId'],
         );
     }
 }
