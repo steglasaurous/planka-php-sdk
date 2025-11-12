@@ -39,8 +39,8 @@ final class AttachmentDtoFactory implements OutputInterface
             updatedAt: $this->convertToDateTime($data['updatedAt']),
             type: $data['type'],
             data: (new AttachmentDataDto(
-                encoding: $data['data']['encoding'],
-                mimeType: $data['data']['mimeType'],
+                encoding: $data['data']['encoding'] ?? '',
+                mimeType: $data['data']['mimeType'] ?? '',
                 sizeInBytes: $data['data']['sizeInBytes'],
                 url: $data['data']['url'],
                 thumbnailUrls: $data['data']['thumbnailUrls'] ?? [],
