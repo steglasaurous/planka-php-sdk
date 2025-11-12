@@ -8,6 +8,7 @@ use Planka\Bridge\Views\Factory\Image\ImageDtoFactory;
 use Planka\Bridge\Views\Dto\Attachment\AttachmentDto;
 use Planka\Bridge\Contracts\Factory\OutputInterface;
 use Planka\Bridge\Traits\DateConverterTrait;
+use Planka\Bridge\Views\Dto\Attachment\AttachmentDataDto;
 
 final class AttachmentDtoFactory implements OutputInterface
 {
@@ -34,14 +35,20 @@ final class AttachmentDtoFactory implements OutputInterface
 
         return new AttachmentDto(
             id: $data['id'],
-            name: $data['name'],
-            cardId: $data['cardId'],
-            url: $data['url'],
-            creatorUserId: $data['creatorUserId'],
             createdAt: $this->convertToDateTime($data['createdAt']),
             updatedAt: $this->convertToDateTime($data['updatedAt']),
-            coverUrl: $data['coverUrl'],
-            image: (new ImageDtoFactory())->create($data['image'] ?? null),
+            type: $data['type'],
+            data: (new AttachmentDataDto(
+                encoding: $data['data']['encoding'],
+                mimeType: $data['data']['mimeType'],
+                sizeInBytes: $data['data']['sizeInBytes'],
+                url: $data['data']['url'],
+                thumbnailUrls: $data['data']['thumbnailUrls'] ?? [],
+                image: (new ImageDtoFactory())->create($data['data']['image'] ?? null),
+            )),       
+            name: $data['name'],
+            cardId: $data['cardId'],     
+            creatorUserId: $data['creatorUserId'],
         );
     }
 }
