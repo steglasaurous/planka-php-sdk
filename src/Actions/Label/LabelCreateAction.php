@@ -34,7 +34,7 @@ final class LabelCreateAction implements ActionInterface, AuthenticateInterface,
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'color' => $this->color->value,
                 'name' => $this->name,
                 'position' => $this->position,

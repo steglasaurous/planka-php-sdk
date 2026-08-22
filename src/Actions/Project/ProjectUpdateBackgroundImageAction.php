@@ -9,7 +9,7 @@ use Planka\Bridge\Contracts\Actions\AuthenticateInterface;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Planka\Bridge\Contracts\Actions\ActionInterface;
 use Planka\Bridge\Exceptions\FileExistException;
-use Planka\Bridge\Traits\ProjectHydrateTrait;
+use Planka\Bridge\Traits\BackgroundImageHydrateTrait;
 use Planka\Bridge\Traits\AuthenticateTrait;
 use Symfony\Component\Mime\Part\DataPart;
 
@@ -19,7 +19,7 @@ final class ProjectUpdateBackgroundImageAction implements
     ResponseResultInterface
 {
     use AuthenticateTrait;
-    use ProjectHydrateTrait;
+    use BackgroundImageHydrateTrait;
 
     /**
      * @throws FileExistException
@@ -38,7 +38,7 @@ final class ProjectUpdateBackgroundImageAction implements
 
     public function url(): string
     {
-        return "api/projects/{$this->projectId}/background-image";
+        return "api/projects/{$this->projectId}/background-images";
     }
 
     public function getOptions(): array

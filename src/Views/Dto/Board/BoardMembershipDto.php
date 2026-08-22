@@ -11,8 +11,9 @@ final class BoardMembershipDto implements OutputDtoInterface
 {
     public function __construct(
         public readonly string $id,
-        public readonly \DateTimeImmutable $createdAt,
+        public readonly ?\DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
+        public string $projectId,
         public string $userId,
         public bool $canComment,
         public BoardMembershipRoleEnum $role,

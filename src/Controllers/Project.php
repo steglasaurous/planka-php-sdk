@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Planka\Bridge\Controllers;
 
 use Planka\Bridge\Actions\Project\ProjectUpdateBackgroundImageAction;
+use Planka\Bridge\Views\Dto\Background\BackgroundImageDto;
 use Planka\Bridge\Actions\Project\ProjectUpdateAction;
 use Planka\Bridge\Actions\Project\ProjectCreateAction;
 use Planka\Bridge\Actions\Project\ProjectDeleteAction;
@@ -14,6 +15,7 @@ use Planka\Bridge\Views\Dto\Project\ProjectListDto;
 use Planka\Bridge\Exceptions\FileExistException;
 use Planka\Bridge\Views\Dto\Project\ProjectDto;
 use Planka\Bridge\TransportClients\Client;
+use Planka\Bridge\Enum\ProjectTypeEnum;
 use Planka\Bridge\Config;
 
 final class Project
@@ -23,18 +25,21 @@ final class Project
         private readonly Client $client,
     ) {}
 
-    /**
-     * 'GET /api/projects'.
-     */
+    /** 'GET /api/projects' */
     public function list(): ProjectListDto
     {
         return $this->client->get(new ProjectListAction(token: $this->config->getAuthToken()));
     }
 
     /** 'POST /api/projects' */
-    public function create(string $name): ProjectDto
+    public function create(string $name, ProjectTypeEnum $type = ProjectTypeEnum::PRIVATE, ?string $description = null): ProjectDto
     {
-        return $this->client->post(new ProjectCreateAction(name: $name, token: $this->config->getAuthToken()));
+        return $this->client->post(new ProjectCreateAction(
+            name: $name,
+            type: $type,
+            token: $this->config->getAuthToken(),
+            description: $description,
+        ));
     }
 
     /** 'GET /api/projects/:id' */
@@ -62,11 +67,11 @@ final class Project
     }
 
     /**
-     * 'POST /api/projects/:id/background-image'.
+     * 'POST /api/projects/:id/background-images'.
      *
      * @throws FileExistException
      */
-    public function updateBackgroundImage(string $projectId, string $file): ProjectDto
+    public function updateBackgroundImage(string $projectId, string $file): BackgroundImageDto
     {
         return $this->client->post(new ProjectUpdateBackgroundImageAction(
             projectId: $projectId,

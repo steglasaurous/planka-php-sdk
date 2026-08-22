@@ -9,6 +9,7 @@ use Planka\Bridge\Contracts\Actions\AuthenticateInterface;
 use Planka\Bridge\Contracts\Actions\ActionInterface;
 use Planka\Bridge\Traits\BoardListHydrateTrait;
 use Planka\Bridge\Traits\AuthenticateTrait;
+use Planka\Bridge\Enum\ListTypeEnum;
 
 final class BoardListCreateAction implements ActionInterface, AuthenticateInterface, ResponseResultInterface
 {
@@ -19,6 +20,7 @@ final class BoardListCreateAction implements ActionInterface, AuthenticateInterf
         private readonly string $boardId,
         private readonly string $name,
         private readonly int $position,
+        private readonly ListTypeEnum $type,
         string $token,
     ) {
         $this->setToken($token);
@@ -32,9 +34,10 @@ final class BoardListCreateAction implements ActionInterface, AuthenticateInterf
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'name' => $this->name,
                 'position' => $this->position,
+                'type' => $this->type->value,
             ],
         ];
     }

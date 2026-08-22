@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Views\Dto\Comment;
 
-use Planka\Bridge\Enum\CommentTypeEnum;
+use Planka\Bridge\Contracts\Dto\OutputDtoInterface;
 
-class CommentDto
+class CommentDto implements OutputDtoInterface
 {
     public function __construct(
         public readonly string $id,
-        public readonly \DateTimeImmutable $createdAt,
+        public readonly ?\DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
         public readonly string $cardId,
-        public readonly string $userId,
-        public readonly CommentTypeEnum $type,
-        public string $dataText,
+        public readonly ?string $userId,
+        public string $text,
     ) {}
 }

@@ -29,11 +29,21 @@ final class UserUpdateAction implements ActionInterface, AuthenticateInterface, 
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'name' => $this->user->name,
                 'organization' => $this->user->organization,
                 'phone' => $this->user->phone,
-                'isAdmin' => $this->user->isAdmin,
+                'language' => $this->user->language,
+                'role' => $this->user->role->value,
+                'subscribeToOwnCards' => $this->user->subscribeToOwnCards,
+                'subscribeToCardWhenCommenting' => $this->user->subscribeToCardWhenCommenting,
+                'turnOffRecentCardHighlighting' => $this->user->turnOffRecentCardHighlighting,
+                'enableFavoritesByDefault' => $this->user->enableFavoritesByDefault,
+                'defaultEditorMode' => $this->user->defaultEditorMode?->value,
+                'defaultHomeView' => $this->user->defaultHomeView?->value,
+                'defaultProjectsOrder' => $this->user->defaultProjectsOrder?->value,
+                'autoLogoutMode' => $this->user->autoLogoutMode?->value,
+                'isDeactivated' => $this->user->isDeactivated,
             ],
         ];
     }

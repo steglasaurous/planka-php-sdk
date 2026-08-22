@@ -33,7 +33,7 @@ final class BoardMembershipUpdateAction implements ActionInterface, Authenticate
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'canComment' => $this->canComment,
                 'role' => $this->role->value,
             ],

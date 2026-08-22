@@ -31,7 +31,7 @@ final class AttachmentUpdateAction implements ActionInterface, AuthenticateInter
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'name' => $this->name,
             ],
         ];

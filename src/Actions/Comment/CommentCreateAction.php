@@ -25,13 +25,13 @@ final class CommentCreateAction implements ActionInterface, AuthenticateInterfac
 
     public function url(): string
     {
-        return "api/cards/{$this->cardId}/comment-actions";
+        return "api/cards/{$this->cardId}/comments";
     }
 
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'text' => $this->text,
             ],
         ];

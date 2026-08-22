@@ -21,6 +21,7 @@ final class Client
         private readonly string $baseUri,
         private readonly int $port,
         ?HttpClientInterface $client = null,
+        private readonly ?string $apiKey = null,
     ) {
         $this->client = $client ?? HttpClient::create();
     }
@@ -86,7 +87,15 @@ final class Client
         $options = $action->getOptions();
 
         if ($action instanceof AuthenticateInterface) {
-            $options['auth_bearer'] = $action->getToken();
+            $token = $action->getToken();
+
+            if ('' !== $token) {
+                $options['auth_bearer'] = $token;
+            }
+        }
+
+        if (null !== $this->apiKey && '' !== $this->apiKey) {
+            $options['headers']['X-Api-Key'] = $this->apiKey;
         }
 
         return $options;

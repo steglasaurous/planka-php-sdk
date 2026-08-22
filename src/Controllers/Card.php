@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Controllers;
 
-use Planka\Bridge\Actions\Card\CardUnsubscribeMembershipAction;
-use Planka\Bridge\Actions\Card\CardSubscribeMembershipAction;
+use Planka\Bridge\Actions\Card\CardReadNotificationsAction;
 use Planka\Bridge\Actions\Card\CardClearDueDateAction;
-use Planka\Bridge\Views\Dto\Card\CardMembershipDto;
+use Planka\Bridge\Actions\Card\CardDuplicateAction;
+use Planka\Bridge\Actions\Card\CardSubscribeAction;
 use Planka\Bridge\Actions\Card\CardCreateAction;
 use Planka\Bridge\Actions\Card\CardDeleteAction;
 use Planka\Bridge\Actions\Card\CardUpdateAction;
 use Planka\Bridge\Actions\Card\CardTimerAction;
+use Planka\Bridge\Actions\Card\CardListAction;
 use Planka\Bridge\Actions\Card\CardMoveAction;
 use Planka\Bridge\Actions\Card\CardViewAction;
 use Planka\Bridge\TransportClients\Client;
 use Planka\Bridge\Views\Dto\Card\CardDto;
+use Planka\Bridge\Enum\CardTypeEnum;
 use Planka\Bridge\Config;
 
 final class Card
@@ -26,14 +28,53 @@ final class Card
     ) {}
 
     /** 'POST /api/lists/:listId/cards' */
-    public function create(string $listId, string $name, int $position, string $type): CardDto
-    {
+    public function create(
+        string $listId,
+        string $name,
+        int $position,
+        CardTypeEnum|string $type = CardTypeEnum::PROJECT,
+        ?string $description = null,
+        ?\DateTimeInterface $dueDate = null,
+        ?bool $isDueCompleted = null,
+    ): CardDto {
+        $cardType = $type instanceof CardTypeEnum ? $type : CardTypeEnum::from($type);
+
         return $this->client->post(new CardCreateAction(
             listId: $listId,
             name: $name,
+            type: $cardType,
             position: $position,
-            type: $type,
             token: $this->config->getAuthToken(),
+            description: $description,
+            dueDate: $dueDate,
+            isDueCompleted: $isDueCompleted,
+        ));
+    }
+
+    /**
+     * 'GET /api/lists/:listId/cards'.
+     *
+     * @param list<string>|null $userIds
+     * @param list<string>|null $labelIds
+     *
+     * @return list<CardDto>
+     */
+    public function list(
+        string $listId,
+        ?string $beforeId = null,
+        ?string $beforeListChangedAt = null,
+        ?string $search = null,
+        ?array $userIds = null,
+        ?array $labelIds = null,
+    ): array {
+        return $this->client->get(new CardListAction(
+            listId: $listId,
+            token: $this->config->getAuthToken(),
+            beforeId: $beforeId,
+            beforeListChangedAt: $beforeListChangedAt,
+            search: $search,
+            userIds: $userIds,
+            labelIds: $labelIds,
         ));
     }
 
@@ -41,6 +82,24 @@ final class Card
     public function get(string $cardId): CardDto
     {
         return $this->client->get(new CardViewAction(cardId: $cardId, token: $this->config->getAuthToken()));
+    }
+
+    /** 'POST /api/cards/:id/duplicate' */
+    public function duplicate(
+        string $cardId,
+        ?string $boardId = null,
+        ?string $listId = null,
+        ?int $position = null,
+        ?string $name = null,
+    ): CardDto {
+        return $this->client->post(new CardDuplicateAction(
+            cardId: $cardId,
+            token: $this->config->getAuthToken(),
+            boardId: $boardId,
+            listId: $listId,
+            position: $position,
+            name: $name,
+        ));
     }
 
     /** 'PATCH /api/cards/:id' */
@@ -96,22 +155,27 @@ final class Card
         $this->client->delete(new CardDeleteAction(cardId: $cardId, token: $this->config->getAuthToken()));
     }
 
-    /** 'POST /api/cards/:cardId/memberships' */
-    public function subscribe(string $cardId, string $userId): CardMembershipDto
+    /** 'PATCH /api/cards/:id' with isSubscribed */
+    public function subscribe(string $cardId, bool $isSubscribed = true): CardDto
     {
-        return $this->client->post(new CardSubscribeMembershipAction(
+        return $this->client->patch(new CardSubscribeAction(
             cardId: $cardId,
-            userId: $userId,
+            isSubscribed: $isSubscribed,
             token: $this->config->getAuthToken(),
         ));
     }
 
-    /** 'DELETE /api/cards/:cardId/memberships' */
-    public function unsubscribe(string $cardId, string $userId): CardMembershipDto
+    /** 'PATCH /api/cards/:id' with isSubscribed=false */
+    public function unsubscribe(string $cardId): CardDto
     {
-        return $this->client->delete(new CardUnsubscribeMembershipAction(
+        return $this->subscribe($cardId, false);
+    }
+
+    /** 'POST /api/cards/:id/read-notifications' */
+    public function readNotifications(string $cardId): CardDto
+    {
+        return $this->client->post(new CardReadNotificationsAction(
             cardId: $cardId,
-            userId: $userId,
             token: $this->config->getAuthToken(),
         ));
     }

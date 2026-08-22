@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Planka\Bridge\Traits;
+
+use Planka\Bridge\Views\Factory\CustomField\BaseCustomFieldGroupDtoFactory;
+use Planka\Bridge\Views\Dto\CustomField\BaseCustomFieldGroupDto;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Planka\Bridge\Exceptions\ResponseException;
+
+trait BaseCustomFieldGroupHydrateTrait
+{
+    final public function hydrate(ResponseInterface $response): BaseCustomFieldGroupDto
+    {
+        $result = $response->toArray();
+
+        if (array_key_exists('item', $result)) {
+            return (new BaseCustomFieldGroupDtoFactory())->create($result['item']);
+        }
+
+        throw new ResponseException($response->getContent());
+    }
+}

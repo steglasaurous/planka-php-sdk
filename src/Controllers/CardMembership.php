@@ -17,7 +17,7 @@ final class CardMembership
         private readonly Client $client,
     ) {}
 
-    /** 'POST /api/cards/:cardId/memberships' */
+    /** 'POST /api/cards/:cardId/card-memberships' */
     public function add(string $cardId, string $userId): CardMembershipDto
     {
         return $this->client->post(new CardMembershipCreateAction(
@@ -27,7 +27,7 @@ final class CardMembership
         ));
     }
 
-    /** 'DELETE /api/cards/:cardId/memberships?userId=:userId' */
+    /** 'DELETE /api/cards/:cardId/card-memberships/userId:{userId}' */
     public function remove(string $cardId, string $userId): CardMembershipDto
     {
         return $this->client->delete(new CardMembershipDeleteAction(

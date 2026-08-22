@@ -18,14 +18,21 @@ final class CardTask
         private readonly Client $client,
     ) {}
 
-    /** 'POST /api/cards/:cardId/tasks' */
-    public function create(string $cardId, string $name, int $position): CardTaskDto
-    {
+    /** 'POST /api/task-lists/:taskListId/tasks' */
+    public function create(
+        string $taskListId,
+        int $position,
+        ?string $name = null,
+        ?bool $isCompleted = null,
+        ?string $linkedCardId = null,
+    ): CardTaskDto {
         return $this->client->post(new CardTaskCreateAction(
-            cardId: $cardId,
-            name: $name,
+            taskListId: $taskListId,
             position: $position,
             token: $this->config->getAuthToken(),
+            name: $name,
+            isCompleted: $isCompleted,
+            linkedCardId: $linkedCardId,
         ));
     }
 

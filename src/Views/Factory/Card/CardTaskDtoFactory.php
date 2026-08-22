@@ -12,28 +12,18 @@ final class CardTaskDtoFactory implements OutputInterface
 {
     use DateConverterTrait;
 
-    /**
-     * @param array{
-     *     id: string,
-     *     createdAt: string,
-     *     updatedAt: ?string,
-     *     position: int,
-     *     name: string,
-     *     isCompleted: bool,
-     *     cardId: string
-     * } $data
-     */
     public function create(array $data): CardTaskDto
     {
         return new CardTaskDto(
             id: $data['id'],
-            createdAt: $this->convertToDateTime($data['createdAt']),
-            updatedAt: $this->convertToDateTime($data['updatedAt']),
-            position: (int) $data['position'],
-            name: $data['name'],
-            isCompleted: (bool) $data['isCompleted'],
-            taskListId: $data['taskListId'],
-            assigneeUserId: $data['assigneeUserId'],
+            createdAt: $this->convertToDateTime($data['createdAt'] ?? null),
+            updatedAt: $this->convertToDateTime($data['updatedAt'] ?? null),
+            position: (int) ($data['position'] ?? 0),
+            name: $data['name'] ?? null,
+            isCompleted: (bool) ($data['isCompleted'] ?? false),
+            taskListId: $data['taskListId'] ?? '',
+            linkedCardId: $data['linkedCardId'] ?? null,
+            assigneeUserId: $data['assigneeUserId'] ?? null,
         );
     }
 }

@@ -29,10 +29,12 @@ final class CardTaskUpdateAction implements ActionInterface, AuthenticateInterfa
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'name' => $this->task->name,
                 'position' => $this->task->position,
                 'isCompleted' => $this->task->isCompleted,
+                'taskListId' => $this->task->taskListId,
+                'assigneeUserId' => $this->task->assigneeUserId,
             ],
         ];
     }

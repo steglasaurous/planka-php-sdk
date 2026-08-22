@@ -10,6 +10,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Planka\Bridge\Contracts\Actions\ActionInterface;
 use Planka\Bridge\Exceptions\FileExistException;
 use Planka\Bridge\Traits\AttachmentHydrateTrait;
+use Planka\Bridge\Enum\AttachmentTypeEnum;
 use Planka\Bridge\Traits\AuthenticateTrait;
 use Symfony\Component\Mime\Part\DataPart;
 
@@ -23,13 +24,18 @@ final class AttachmentCreateAction implements ActionInterface, AuthenticateInter
      */
     public function __construct(
         private readonly string $cardId,
-        private readonly string $file,
+        private readonly string $name,
+        private readonly AttachmentTypeEnum $type,
         string $token,
+        private readonly ?string $file = null,
+        private readonly ?string $url = null,
     ) {
         $this->setToken($token);
 
-        if (!file_exists($file) || !is_readable($file)) {
-            throw new FileExistException("File not exist {$file}");
+        if (AttachmentTypeEnum::FILE === $this->type) {
+            if (null === $this->file || !file_exists($this->file) || !is_readable($this->file)) {
+                throw new FileExistException("File not exist {$this->file}");
+            }
         }
     }
 
@@ -41,8 +47,18 @@ final class AttachmentCreateAction implements ActionInterface, AuthenticateInter
     public function getOptions(): array
     {
         $formFields = [
-            'file' => DataPart::fromPath($this->file),
+            'type' => $this->type->value,
+            'name' => $this->name,
         ];
+
+        if (null !== $this->file) {
+            $formFields['file'] = DataPart::fromPath($this->file);
+        }
+
+        if (null !== $this->url) {
+            $formFields['url'] = $this->url;
+        }
+
         $formData = new FormDataPart($formFields);
 
         return [

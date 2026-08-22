@@ -8,7 +8,7 @@ use Planka\Bridge\Views\Dto\Image\ImageDto;
 
 class AttachmentDataDto
 {
-    public function __construct(        
+    public function __construct(
         public readonly string $encoding,
         public readonly string $mimeType,
         public readonly int $sizeInBytes,

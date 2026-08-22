@@ -31,7 +31,7 @@ final class CardLabelCreateAction implements ActionInterface, AuthenticateInterf
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'labelId' => $this->labelId,
             ],
         ];

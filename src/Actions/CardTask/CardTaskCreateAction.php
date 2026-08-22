@@ -16,26 +16,41 @@ final class CardTaskCreateAction implements ActionInterface, AuthenticateInterfa
     use CardTaskHydrateTrait;
 
     public function __construct(
-        private readonly string $cardId,
-        private readonly string $name,
+        private readonly string $taskListId,
         private readonly int $position,
         string $token,
+        private readonly ?string $name = null,
+        private readonly ?bool $isCompleted = null,
+        private readonly ?string $linkedCardId = null,
     ) {
         $this->setToken($token);
     }
 
     public function url(): string
     {
-        return "api/cards/{$this->cardId}/tasks";
+        return "api/task-lists/{$this->taskListId}/tasks";
     }
 
     public function getOptions(): array
     {
+        $json = [
+            'position' => $this->position,
+        ];
+
+        if (null !== $this->name) {
+            $json['name'] = $this->name;
+        }
+
+        if (null !== $this->isCompleted) {
+            $json['isCompleted'] = $this->isCompleted;
+        }
+
+        if (null !== $this->linkedCardId) {
+            $json['linkedCardId'] = $this->linkedCardId;
+        }
+
         return [
-            'body' => [
-                'name' => $this->name,
-                'position' => $this->position,
-            ],
+            'json' => $json,
         ];
     }
 }

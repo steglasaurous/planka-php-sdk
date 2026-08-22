@@ -13,25 +13,15 @@ final class BoardMembershipDtoFactory implements OutputInterface
 {
     use DateConverterTrait;
 
-    /**
-     * @param array{
-     *     id: string,
-     *     createdAt: string,
-     *     updatedAt: ?string,
-     *     role: string,
-     *     canComment: ?bool,
-     *     boardId: string,
-     *     userId: string,
-     * } $data
-     */
     public function create(array $data): BoardMembershipDto
     {
         return new BoardMembershipDto(
             id: $data['id'],
-            createdAt: $this->convertToDateTime($data['createdAt']),
-            updatedAt: $this->convertToDateTime($data['updatedAt']),
+            createdAt: $this->convertToDateTime($data['createdAt'] ?? null),
+            updatedAt: $this->convertToDateTime($data['updatedAt'] ?? null),
+            projectId: $data['projectId'] ?? '',
             userId: $data['userId'],
-            canComment: (bool) $data['canComment'],
+            canComment: (bool) ($data['canComment'] ?? false),
             role: BoardMembershipRoleEnum::from($data['role']),
             boardId: $data['boardId'],
         );

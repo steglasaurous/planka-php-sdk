@@ -7,6 +7,7 @@ namespace Planka\Bridge\Controllers;
 use Planka\Bridge\Actions\Comment\CommentCreateAction;
 use Planka\Bridge\Actions\Comment\CommentDeleteAction;
 use Planka\Bridge\Actions\Comment\CommentUpdateAction;
+use Planka\Bridge\Actions\Comment\CommentListAction;
 use Planka\Bridge\Views\Dto\Comment\CommentDto;
 use Planka\Bridge\TransportClients\Client;
 use Planka\Bridge\Config;
@@ -18,7 +19,21 @@ final class Comment
         private readonly Client $client,
     ) {}
 
-    /** 'POST /api/cards/:cardId/comment-actions' */
+    /**
+     * 'GET /api/cards/:cardId/comments'.
+     *
+     * @return list<CommentDto>
+     */
+    public function list(string $cardId, ?string $beforeId = null): array
+    {
+        return $this->client->get(new CommentListAction(
+            cardId: $cardId,
+            token: $this->config->getAuthToken(),
+            beforeId: $beforeId,
+        ));
+    }
+
+    /** 'POST /api/cards/:cardId/comments' */
     public function add(string $cardId, string $text): CommentDto
     {
         return $this->client->post(new CommentCreateAction(
@@ -28,7 +43,7 @@ final class Comment
         ));
     }
 
-    /** 'PATCH /api/comment-actions/:id' */
+    /** 'PATCH /api/comments/:id' */
     public function update(string $commentId, string $text): CommentDto
     {
         return $this->client->patch(new CommentUpdateAction(
@@ -38,7 +53,7 @@ final class Comment
         ));
     }
 
-    /** 'DELETE /api/comment-actions/:id' */
+    /** 'DELETE /api/comments/:id' */
     public function remove(string $commentId): CommentDto
     {
         return $this->client->delete(new CommentDeleteAction(

@@ -25,7 +25,7 @@ final class CardLabelDeleteAction implements ActionInterface, AuthenticateInterf
 
     public function url(): string
     {
-        return "api/cards/{$this->cardId}/labels/{$this->labelId}";
+        return "api/cards/{$this->cardId}/card-labels/labelId:{$this->labelId}";
     }
 
     public function getOptions(): array

@@ -29,7 +29,7 @@ final class UserUpdateEmailAction implements ActionInterface, AuthenticateInterf
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'email' => $this->user->email,
             ],
         ];

@@ -21,7 +21,7 @@ final class ProjectManager
     ) {}
 
     /**
-     * 'POST /api/projects/:projectId/managers'.
+     * 'POST /api/projects/:projectId/project-managers'.
      *
      * @throws ResponseException|ValidateException
      */

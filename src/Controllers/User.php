@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Controllers;
 
+use Planka\Bridge\Actions\User\UserTrustedDeviceDeleteAction;
+use Planka\Bridge\Actions\User\UserTotpRecoveryCodesAction;
+use Planka\Bridge\Actions\User\UserTrustedDevicesAction;
 use Planka\Bridge\Actions\User\UserUpdatePasswordAction;
 use Planka\Bridge\Actions\User\UserUpdateUsernameAction;
+use Planka\Bridge\Actions\User\UserCreateApiKeyAction;
 use Planka\Bridge\Actions\User\UserUpdateAvatarAction;
+use Planka\Bridge\Actions\User\UserTotpDisableAction;
 use Planka\Bridge\Actions\User\UserUpdateEmailAction;
+use Planka\Bridge\Actions\User\UserTotpEnableAction;
+use Planka\Bridge\Actions\User\UserTotpSetupAction;
 use Planka\Bridge\Actions\User\UserCreateAction;
 use Planka\Bridge\Actions\User\UserDeleteAction;
 use Planka\Bridge\Actions\User\UserUpdateAction;
@@ -16,6 +23,7 @@ use Planka\Bridge\Actions\User\UserListAction;
 use Planka\Bridge\Actions\User\UserViewAction;
 use Planka\Bridge\TransportClients\Client;
 use Planka\Bridge\Views\Dto\User\UserDto;
+use Planka\Bridge\Enum\UserRoleEnum;
 use Planka\Bridge\Config;
 
 final class User
@@ -36,14 +44,26 @@ final class User
     }
 
     /** 'POST /api/users' */
-    public function create(string $email, string $name, string $password, string $username): UserDto
-    {
+    public function create(
+        string $email,
+        string $name,
+        string $password,
+        UserRoleEnum $role,
+        ?string $username = null,
+        ?string $phone = null,
+        ?string $organization = null,
+        ?string $language = null,
+    ): UserDto {
         return $this->client->post(new UserCreateAction(
             email: $email,
             name: $name,
             password: $password,
-            username: $username,
+            role: $role,
             token: $this->config->getAuthToken(),
+            username: $username,
+            phone: $phone,
+            organization: $organization,
+            language: $language,
         ));
     }
 
@@ -100,5 +120,84 @@ final class User
     public function delete(UserDto $dto): UserDto
     {
         return $this->client->delete(new UserDeleteAction(user: $dto, token: $this->config->getAuthToken()));
+    }
+
+    /** 'POST /api/users/:id/api-key' */
+    public function createApiKey(string $userId): UserDto
+    {
+        return $this->client->post(new UserCreateApiKeyAction(
+            userId: $userId,
+            token: $this->config->getAuthToken(),
+        ));
+    }
+
+    /**
+     * 'POST /api/users/:id/totp/setup'.
+     *
+     * @return array{secret?: string, provisioningUri?: string}
+     */
+    public function setupTotp(string $userId, string $currentPassword): array
+    {
+        return $this->client->post(new UserTotpSetupAction(
+            userId: $userId,
+            currentPassword: $currentPassword,
+            token: $this->config->getAuthToken(),
+        ));
+    }
+
+    /** 'POST /api/users/:id/totp/enable' */
+    public function enableTotp(string $userId, string $currentPassword, string $code): UserDto
+    {
+        return $this->client->post(new UserTotpEnableAction(
+            userId: $userId,
+            currentPassword: $currentPassword,
+            code: $code,
+            token: $this->config->getAuthToken(),
+        ));
+    }
+
+    /** 'DELETE /api/users/:id/totp' */
+    public function disableTotp(string $userId, ?string $currentPassword = null, ?string $code = null): UserDto
+    {
+        return $this->client->delete(new UserTotpDisableAction(
+            userId: $userId,
+            token: $this->config->getAuthToken(),
+            currentPassword: $currentPassword,
+            code: $code,
+        ));
+    }
+
+    /**
+     * 'POST /api/users/:id/totp/recovery-codes'.
+     *
+     * @return list<string>
+     */
+    public function regenerateTotpRecoveryCodes(string $userId, string $currentPassword, string $code): array
+    {
+        return $this->client->post(new UserTotpRecoveryCodesAction(
+            userId: $userId,
+            currentPassword: $currentPassword,
+            code: $code,
+            token: $this->config->getAuthToken(),
+        ));
+    }
+
+    /** 'GET /api/users/:id/trusted-devices' */
+    public function listTrustedDevices(string $userId): array
+    {
+        return $this->client->get(new UserTrustedDevicesAction(
+            userId: $userId,
+            token: $this->config->getAuthToken(),
+        ));
+    }
+
+    /** 'DELETE /api/users/:id/trusted-devices/:deviceId' */
+    public function deleteTrustedDevice(string $userId, string $deviceId): array
+    {
+        return $this->client->delete(new UserTrustedDeviceDeleteAction(
+            userId: $userId,
+            deviceId: $deviceId,
+            token: $this->config->getAuthToken(),
+        ));
     }
 }

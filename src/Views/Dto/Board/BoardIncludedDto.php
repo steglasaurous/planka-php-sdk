@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Views\Dto\Board;
 
+use Planka\Bridge\Views\Dto\NotificationService\NotificationServiceDto;
+use Planka\Bridge\Views\Dto\CustomField\CustomFieldGroupDto;
+use Planka\Bridge\Views\Dto\CustomField\CustomFieldValueDto;
+use Planka\Bridge\Views\Dto\CustomField\CustomFieldDto;
 use Planka\Bridge\Views\Dto\Attachment\AttachmentDto;
 use Planka\Bridge\Views\Dto\Card\CardMembershipDto;
+use Planka\Bridge\Views\Dto\TaskList\TaskListDto;
 use Planka\Bridge\Views\Dto\Project\ProjectDto;
 use Planka\Bridge\Views\Dto\Card\CardTaskDto;
 use Planka\Bridge\Views\Dto\Card\CardLabelDto;
@@ -17,16 +22,21 @@ use Planka\Bridge\Views\Dto\Card\CardDto;
 final class BoardIncludedDto
 {
     /**
-     * @param list<UserDto>            $users
-     * @param list<BoardMembershipDto> $boardMemberships
-     * @param list<LabelDto>           $labels
-     * @param list<ListDto>            $lists
-     * @param list<CardDto>            $cards
-     * @param list<CardMembershipDto>  $cardMemberships
-     * @param list<CardLabelDto>       $cardLabels
-     * @param list<CardTaskDto>        $tasks
-     * @param list<AttachmentDto>      $attachments
-     * @param list<ProjectDto>         $projects
+     * @param list<UserDto>                $users
+     * @param list<BoardMembershipDto>     $boardMemberships
+     * @param list<LabelDto>               $labels
+     * @param list<ListDto>                $lists
+     * @param list<CardDto>                $cards
+     * @param list<CardMembershipDto>      $cardMemberships
+     * @param list<CardLabelDto>           $cardLabels
+     * @param list<TaskListDto>            $taskLists
+     * @param list<CardTaskDto>            $tasks
+     * @param list<AttachmentDto>          $attachments
+     * @param list<ProjectDto>             $projects
+     * @param list<CustomFieldGroupDto>    $customFieldGroups
+     * @param list<CustomFieldDto>         $customFields
+     * @param list<CustomFieldValueDto>    $customFieldValues
+     * @param list<NotificationServiceDto> $notificationServices
      */
     public function __construct(
         public array $users,
@@ -36,8 +46,13 @@ final class BoardIncludedDto
         public array $cards,
         public array $cardMemberships,
         public array $cardLabels,
+        public array $taskLists,
         public array $tasks,
         public array $attachments,
         public array $projects,
+        public array $customFieldGroups = [],
+        public array $customFields = [],
+        public array $customFieldValues = [],
+        public array $notificationServices = [],
     ) {}
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Controllers;
 
+use Planka\Bridge\Actions\Notification\NotificationReadAllAction;
 use Planka\Bridge\Actions\Notification\NotificationUpdateAction;
 use Planka\Bridge\Actions\Notification\NotificationListAction;
 use Planka\Bridge\Actions\Notification\NotificationVewAction;
@@ -25,9 +26,7 @@ final class Notification
         return $this->client->get(new NotificationListAction(token: $this->config->getAuthToken()));
     }
 
-    /**
-     * 'GET /api/notifications/:id'.
-     */
+    /** 'GET /api/notifications/:id' */
     public function getOne(string $notifyId): NotificationItemDto
     {
         return $this->client->get(new NotificationVewAction(
@@ -36,31 +35,53 @@ final class Notification
         ));
     }
 
-    /**
-     * 'PATCH /api/notifications/:ids'.
-     *
-     * @return list<NotificationItemDto>
-     */
-    public function markIsRead(array $notifyIdList): array
+    /** 'PATCH /api/notifications/:id' */
+    public function markIsRead(string $notifyId): NotificationItemDto
     {
         return $this->client->patch(new NotificationUpdateAction(
-            notifyIdList: $notifyIdList,
+            notifyId: $notifyId,
             isRead: true,
             token: $this->config->getAuthToken(),
         ));
     }
 
     /**
-     * 'PATCH /api/notifications/:ids'.
+     * @param list<string> $notifyIdList
      *
      * @return list<NotificationItemDto>
      */
-    public function markIsNotRead(array $notifyIdList): array
+    public function markManyIsRead(array $notifyIdList): array
+    {
+        return array_map(fn(string $id) => $this->markIsRead($id), $notifyIdList);
+    }
+
+    /** 'PATCH /api/notifications/:id' */
+    public function markIsNotRead(string $notifyId): NotificationItemDto
     {
         return $this->client->patch(new NotificationUpdateAction(
-            notifyIdList: $notifyIdList,
+            notifyId: $notifyId,
             isRead: false,
             token: $this->config->getAuthToken(),
         ));
+    }
+
+    /**
+     * @param list<string> $notifyIdList
+     *
+     * @return list<NotificationItemDto>
+     */
+    public function markManyIsNotRead(array $notifyIdList): array
+    {
+        return array_map(fn(string $id) => $this->markIsNotRead($id), $notifyIdList);
+    }
+
+    /**
+     * 'POST /api/notifications/read-all'.
+     *
+     * @return list<NotificationItemDto>
+     */
+    public function readAll(): array
+    {
+        return $this->client->post(new NotificationReadAllAction(token: $this->config->getAuthToken()));
     }
 }

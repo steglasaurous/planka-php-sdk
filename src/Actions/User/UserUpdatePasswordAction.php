@@ -32,7 +32,7 @@ final class UserUpdatePasswordAction implements ActionInterface, AuthenticateInt
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'currentPassword' => $this->current,
                 'password' => $this->new,
             ],

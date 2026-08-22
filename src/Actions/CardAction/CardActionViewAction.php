@@ -16,8 +16,11 @@ final class CardActionViewAction implements ActionInterface, AuthenticateInterfa
 {
     use AuthenticateTrait;
 
-    public function __construct(private readonly string $cardId, string $token)
-    {
+    public function __construct(
+        private readonly string $cardId,
+        string $token,
+        private readonly ?string $beforeId = null,
+    ) {
         $this->setToken($token);
     }
 
@@ -28,9 +31,13 @@ final class CardActionViewAction implements ActionInterface, AuthenticateInterfa
 
     public function getOptions(): array
     {
+        if (null === $this->beforeId) {
+            return [];
+        }
+
         return [
-            'body' => [
-                'withDetails' => false,
+            'query' => [
+                'beforeId' => $this->beforeId,
             ],
         ];
     }

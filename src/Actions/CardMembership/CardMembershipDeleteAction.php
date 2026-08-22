@@ -25,15 +25,11 @@ final class CardMembershipDeleteAction implements ActionInterface, AuthenticateI
 
     public function url(): string
     {
-        return "api/cards/{$this->cardId}/memberships";
+        return "api/cards/{$this->cardId}/card-memberships/userId:{$this->userId}";
     }
 
     public function getOptions(): array
     {
-        return [
-            'query' => [
-                'userId' => $this->userId,
-            ],
-        ];
+        return [];
     }
 }

@@ -25,13 +25,13 @@ final class CardMembershipCreateAction implements ActionInterface, AuthenticateI
 
     public function url(): string
     {
-        return "api/cards/{$this->cardId}/memberships";
+        return "api/cards/{$this->cardId}/card-memberships";
     }
 
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'userId' => $this->userId,
             ],
         ];

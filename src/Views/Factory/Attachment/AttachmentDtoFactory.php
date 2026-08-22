@@ -14,41 +14,30 @@ final class AttachmentDtoFactory implements OutputInterface
 {
     use DateConverterTrait;
 
-    /**
-     * @param array{
-     *     id: string,
-     *     createdAt: string,
-     *     updatedAt: ?string,
-     *     name: string,
-     *     cardId: string,
-     *     url: string,
-     *     coverUrl: ?string,
-     *     creatorUserId: string,
-     *     image: array{height: int, width: int}
-     * }|null $data
-     */
     public function create(?array $data): ?AttachmentDto
     {
-        if (empty($data)) {
+        if (empty($data) || empty($data['id'])) {
             return null;
         }
 
+        $payload = $data['data'] ?? [];
+
         return new AttachmentDto(
             id: $data['id'],
-            createdAt: $this->convertToDateTime($data['createdAt']),
-            updatedAt: $this->convertToDateTime($data['updatedAt']),
-            type: $data['type'],
-            data: (new AttachmentDataDto(
-                encoding: $data['data']['encoding'] ?? '',
-                mimeType: $data['data']['mimeType'] ?? '',
-                sizeInBytes: $data['data']['sizeInBytes'],
-                url: $data['data']['url'],
-                thumbnailUrls: $data['data']['thumbnailUrls'] ?? [],
-                image: (new ImageDtoFactory())->create($data['data']['image'] ?? null),
-            )),       
-            name: $data['name'],
-            cardId: $data['cardId'],     
-            creatorUserId: $data['creatorUserId'],
+            createdAt: $this->convertToDateTime($data['createdAt'] ?? null),
+            updatedAt: $this->convertToDateTime($data['updatedAt'] ?? null),
+            type: $data['type'] ?? 'file',
+            data: new AttachmentDataDto(
+                encoding: $payload['encoding'] ?? '',
+                mimeType: $payload['mimeType'] ?? '',
+                sizeInBytes: (int) ($payload['sizeInBytes'] ?? $payload['size'] ?? 0),
+                url: $payload['url'] ?? ($data['url'] ?? ''),
+                thumbnailUrls: $payload['thumbnailUrls'] ?? [],
+                image: (new ImageDtoFactory())->create($payload['image'] ?? null),
+            ),
+            name: $data['name'] ?? '',
+            cardId: $data['cardId'] ?? '',
+            creatorUserId: $data['creatorUserId'] ?? null,
         );
     }
 }

@@ -10,12 +10,13 @@ class CardTaskDto implements OutputDtoInterface
 {
     public function __construct(
         public readonly string $id,
-        public readonly \DateTimeImmutable $createdAt,
+        public readonly ?\DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
         public int $position,
-        public string $name,
+        public ?string $name,
         public bool $isCompleted,
         public string $taskListId,
+        public ?string $linkedCardId,
         public ?string $assigneeUserId,
     ) {}
 }

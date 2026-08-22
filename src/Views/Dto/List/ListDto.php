@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Views\Dto\List;
 
-class ListDto
+use Planka\Bridge\Contracts\Dto\OutputDtoInterface;
+use Planka\Bridge\Enum\ListColorEnum;
+use Planka\Bridge\Enum\ListTypeEnum;
+
+class ListDto implements OutputDtoInterface
 {
     public function __construct(
         public readonly string $id,
         public readonly string $boardId,
-        public readonly \DateTimeImmutable $createdAt,
+        public readonly ?\DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
-        public int $position,
+        public ?int $position,
         public ?string $name,
-        public ?string $color,
-        public string $type,
+        public ListTypeEnum $type,
+        public ?ListColorEnum $color,
     ) {}
 }

@@ -17,7 +17,7 @@ final class CardLabel
         private readonly Client $client,
     ) {}
 
-    /** 'POST /api/cards/:cardId/labels' */
+    /** 'POST /api/cards/:cardId/card-labels' */
     public function add(string $cardId, string $labelId): CardLabelDto
     {
         return $this->client->post(new CardLabelCreateAction(
@@ -27,7 +27,7 @@ final class CardLabel
         ));
     }
 
-    /** 'DELETE /api/cards/:cardId/labels/:labelId' */
+    /** 'DELETE /api/cards/:cardId/card-labels/labelId:{labelId}' */
     public function remove(string $cardId, string $labelId): CardLabelDto
     {
         return $this->client->delete(new CardLabelDeleteAction(

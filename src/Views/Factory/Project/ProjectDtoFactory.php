@@ -4,35 +4,30 @@ declare(strict_types=1);
 
 namespace Planka\Bridge\Views\Factory\Project;
 
-use Planka\Bridge\Views\Factory\Background\BackgroundImageDtoFactory;
-use Planka\Bridge\Views\Factory\Background\BackgroundDtoFactory;
+use Planka\Bridge\Enum\BackgroundGradientEnum;
 use Planka\Bridge\Contracts\Factory\OutputInterface;
 use Planka\Bridge\Views\Dto\Project\ProjectDto;
+use Planka\Bridge\Enum\BackgroundTypeEnum;
 use Planka\Bridge\Traits\DateConverterTrait;
 
 final class ProjectDtoFactory implements OutputInterface
 {
     use DateConverterTrait;
 
-    /**
-     * @param array{
-     *     id: string,
-     *     createdAt: string,
-     *     updatedAt: ?string,
-     *     name: string,
-     *     background: array{type: string,name?: ?string}|null,
-     *     backgroundImage: array{url: string, coverUrl: string}|null
-     * } $data
-     */
     public function create(array $data): ProjectDto
     {
         return new ProjectDto(
             id: $data['id'],
-            createdAt: $this->convertToDateTime($data['createdAt']),
-            updatedAt: $this->convertToDateTime($data['updatedAt']),
+            createdAt: $this->convertToDateTime($data['createdAt'] ?? null),
+            updatedAt: $this->convertToDateTime($data['updatedAt'] ?? null),
             name: $data['name'],
-            background: (new BackgroundDtoFactory())->create($data['background'] ?? null),
-            backgroundImage: (new BackgroundImageDtoFactory())->create($data['backgroundImage'] ?? null),
+            description: $data['description'] ?? null,
+            ownerProjectManagerId: $data['ownerProjectManagerId'] ?? null,
+            backgroundImageId: $data['backgroundImageId'] ?? null,
+            backgroundType: BackgroundTypeEnum::tryFrom($data['backgroundType'] ?? ''),
+            backgroundGradient: BackgroundGradientEnum::tryFrom($data['backgroundGradient'] ?? ''),
+            isHidden: (bool) ($data['isHidden'] ?? false),
+            isFavorite: (bool) ($data['isFavorite'] ?? false),
             _rawResponse: $data,
         );
     }

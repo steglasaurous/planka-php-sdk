@@ -27,13 +27,13 @@ final class BoardMembershipAddAction implements ActionInterface, AuthenticateInt
 
     public function url(): string
     {
-        return "api/boards/{$this->boardId}/memberships";
+        return "api/boards/{$this->boardId}/board-memberships";
     }
 
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'role' => $this->role->value,
                 'userId' => $this->userId,
             ],

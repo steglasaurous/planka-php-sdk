@@ -8,7 +8,7 @@ class ProjectManagerDto
 {
     public function __construct(
         public readonly string $id,
-        public readonly \DateTimeImmutable $createdAt,
+        public readonly ?\DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
         public readonly string $projectId,
         public readonly string $userId,

@@ -5,36 +5,45 @@ declare(strict_types=1);
 namespace Planka\Bridge\Views\Dto\User;
 
 use Planka\Bridge\Contracts\Dto\OutputDtoInterface;
+use Planka\Bridge\Enum\AutoLogoutModeEnum;
+use Planka\Bridge\Enum\ProjectsOrderEnum;
+use Planka\Bridge\Enum\EditorModeEnum;
+use Planka\Bridge\Enum\HomeViewEnum;
+use Planka\Bridge\Enum\UserRoleEnum;
 
 class UserDto implements OutputDtoInterface
 {
+    /**
+     * @param list<string> $lockedFieldNames
+     */
     public function __construct(
         public readonly string $id,
-        public readonly \DateTimeImmutable $createdAt,
+        public readonly ?\DateTimeImmutable $createdAt,
         public readonly ?\DateTimeImmutable $updatedAt,
         public ?string $email,
-        public string $role,
+        public UserRoleEnum $role,
         public ?string $name,
         public ?string $username,
         public ?string $phone,
         public ?string $organization,
         public ?string $language,
+        public ?AvatarDto $avatar,
+        public ?string $gravatarUrl,
+        public ?string $apiKeyPrefix,
         public bool $subscribeToOwnCards,
-        public readonly ?\DateTimeImmutable $deletedAt,
-        public bool $isLocked,
-        public bool $isRoleLocked,
-        public bool $isUsernameLocked,
-        public bool $isDeletionLocked,
-        public ?string $avatarUrl,
-        public readonly array $_rawResponse = [],
         public bool $subscribeToCardWhenCommenting,
         public bool $turnOffRecentCardHighlighting,
         public bool $enableFavoritesByDefault,
-        public string $defaultEditorMode,
-        public string $defaultProjectsOrder,
-        public bool $isSsoUser,
+        public ?EditorModeEnum $defaultEditorMode,
+        public ?HomeViewEnum $defaultHomeView,
+        public ?ProjectsOrderEnum $defaultProjectsOrder,
+        public ?AutoLogoutModeEnum $autoLogoutMode,
+        public bool $isTotpEnabled,
+        public readonly ?\DateTimeImmutable $totpEnabledAt,
+        public ?int $totpRecoveryCodesRemaining,
         public bool $isDeactivated,
-        // avatar - it's a particular structure, need to spec that out
-        public bool $isDefaultAdmin
+        public bool $isDefaultAdmin,
+        public array $lockedFieldNames,
+        public readonly array $_rawResponse = [],
     ) {}
 }

@@ -43,25 +43,30 @@ final class CardUpdateAction implements ActionInterface, AuthenticateInterface, 
         }
 
         $body = [
-            'json' => [
-                'name' => $this->card->name,
-                'description' => $this->card->description,
-                'dueDate' => $this->card?->dueDate?->format('Y-m-d\TH:i:s.v\Z'),
-                'listId' => $this->card->listId,
-                'position' => $this->card->position,
-            ],
+            'name' => $this->card->name,
+            'description' => $this->card->description,
+            'dueDate' => $this->card->dueDate?->format('Y-m-d\TH:i:s.v\Z'),
+            'isDueCompleted' => $this->card->isDueCompleted,
+            'listId' => $this->card->listId,
+            'boardId' => $this->card->boardId,
+            'position' => $this->card->position,
+            'type' => $this->card->type->value,
+            'coverAttachmentId' => $this->card->coverAttachmentId,
+            'isSubscribed' => $this->card->isSubscribed,
         ];
 
         if (null === $this->card->stopwatch) {
-            $body['json']['stopwatch'] = null;
+            $body['stopwatch'] = null;
         }
 
-        return $body;
+        return [
+            'json' => $body,
+        ];
     }
 
     private function getTotalTime(): int
     {
-        $time = $this->card?->stopwatch->total ?? 0;
+        $time = $this->card->stopwatch->total ?? 0;
 
         return $time + $this->spentSeconds;
     }

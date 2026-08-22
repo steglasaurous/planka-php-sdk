@@ -33,7 +33,7 @@ final class LabelUpdateAction implements ActionInterface, AuthenticateInterface,
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'name' => $this->name,
                 'color' => $this->color->value,
             ],

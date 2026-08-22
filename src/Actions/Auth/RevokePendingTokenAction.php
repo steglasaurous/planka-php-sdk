@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Planka\Bridge\Actions\Auth;
+
+use Planka\Bridge\Contracts\Actions\ActionInterface;
+
+final class RevokePendingTokenAction implements ActionInterface
+{
+    public function __construct(private readonly string $pendingToken) {}
+
+    public function url(): string
+    {
+        return 'api/access-tokens/revoke-pending-token';
+    }
+
+    public function getOptions(): array
+    {
+        return [
+            'json' => [
+                'pendingToken' => $this->pendingToken,
+            ],
+        ];
+    }
+}

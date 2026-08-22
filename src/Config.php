@@ -13,6 +13,7 @@ final class Config
         private readonly string $password,
         private readonly string $baseUri,
         private readonly int $port,
+        private readonly ?string $apiKey = null,
     ) {}
 
     public function getUser(): string
@@ -25,9 +26,9 @@ final class Config
         return $this->password;
     }
 
-    public function getAuthToken(): ?string
+    public function getAuthToken(): string
     {
-        return $this->authToken;
+        return $this->authToken ?? '';
     }
 
     public function setAuthToken(?string $authToken): void
@@ -43,5 +44,10 @@ final class Config
     public function getPort(): int
     {
         return $this->port;
+    }
+
+    public function getApiKey(): ?string
+    {
+        return $this->apiKey;
     }
 }

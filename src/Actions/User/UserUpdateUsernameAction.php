@@ -29,7 +29,7 @@ final class UserUpdateUsernameAction implements ActionInterface, AuthenticateInt
     public function getOptions(): array
     {
         return [
-            'body' => [
+            'json' => [
                 'username' => $this->user->username,
             ],
         ];

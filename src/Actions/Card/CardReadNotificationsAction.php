@@ -7,17 +7,16 @@ namespace Planka\Bridge\Actions\Card;
 use Planka\Bridge\Contracts\Actions\ResponseResultInterface;
 use Planka\Bridge\Contracts\Actions\AuthenticateInterface;
 use Planka\Bridge\Contracts\Actions\ActionInterface;
-use Planka\Bridge\Traits\CardMembershipHydrateTrait;
 use Planka\Bridge\Traits\AuthenticateTrait;
+use Planka\Bridge\Traits\CardHydrateTrait;
 
-final class CardSubscribeMembershipAction implements ActionInterface, AuthenticateInterface, ResponseResultInterface
+final class CardReadNotificationsAction implements ActionInterface, AuthenticateInterface, ResponseResultInterface
 {
     use AuthenticateTrait;
-    use CardMembershipHydrateTrait;
+    use CardHydrateTrait;
 
     public function __construct(
         private readonly string $cardId,
-        private readonly string $userId,
         string $token,
     ) {
         $this->setToken($token);
@@ -25,15 +24,11 @@ final class CardSubscribeMembershipAction implements ActionInterface, Authentica
 
     public function url(): string
     {
-        return "api/cards/{$this->cardId}/memberships";
+        return "api/cards/{$this->cardId}/read-notifications";
     }
 
     public function getOptions(): array
     {
-        return [
-            'body' => [
-                'userId' => $this->userId,
-            ],
-        ];
+        return [];
     }
 }

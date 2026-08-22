@@ -19,7 +19,7 @@ final class BoardMembership
         private readonly Client $client,
     ) {}
 
-    /** 'POST /api/boards/:boardId/memberships' */
+    /** 'POST /api/boards/:boardId/board-memberships' */
     public function add(string $boardId, string $userId, BoardMembershipRoleEnum $role): BoardMembershipDto
     {
         return $this->client->post(new BoardMembershipAddAction(
